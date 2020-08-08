@@ -476,20 +476,49 @@ INSERT INTO CORREO(correo,medico_id) VALUES ('belixap@gmail.com',126);
 INSERT INTO CORREO(correo,medico_id) VALUES ('josearb666@hotmail.com',127);
 
 /*PISO*/
+INSERT INTO PISO(piso) VALUES ('Planta Baja');
 INSERT INTO PISO(piso,numero) VALUES('Piso',1);
-
-/*CONSULTORIO*/
-INSERT INTO CONSULTORIO(numero,piso_id) VALUES('111',1);
-
-/*MEDICO_CONSULTORIO*/
-INSERT INTO MEDICO_CONSULTORIO(medico_id,consultorio_id) VALUES(13,1);
+INSERT INTO PISO(piso,numero) VALUES('Sotano',1);
 
 /*DIA*/
+INSERT INTO DIA(dia) VALUES('Lunes');
+INSERT INTO DIA(dia) VALUES('Martes');
 INSERT INTO DIA(dia) VALUES('Miercoles');
+INSERT INTO DIA(dia) VALUES('Jueves');
+INSERT INTO DIA(dia) VALUES('Viernes');
+INSERT INTO DIA(dia) VALUES('Sabado');
+INSERT INTO DIA(dia) VALUES('Domingo');
 
-/*CONDICION*/
-INSERT INTO CONDICION(condicion,dia_id,medico_id) VALUES ('(Tarde)',1,13);
- 
+/*CONSULTORIO*/
+INSERT INTO CONSULTORIO(numero,referencia,piso_id) VALUES('Servicio de Oncologia','frente a Medicina Fisica',1);
+INSERT INTO CONSULTORIO(numero,piso_id) VALUES('Medicina Fisica',1);
+INSERT INTO CONSULTORIO(numero,piso_id) VALUES('101',1);
+INSERT INTO CONSULTORIO(numero,piso_id) VALUES('102',1);
+INSERT INTO CONSULTORIO(numero,piso_id) VALUES('106',1);
+INSERT INTO CONSULTORIO(numero,piso_id) VALUES('107',1);
+INSERT INTO CONSULTORIO(numero,referencia,piso_id) VALUES('108','frente a Central de Citas',1);
+INSERT INTO CONSULTORIO(numero,piso_id) VALUES('111',1);
+INSERT INTO CONSULTORIO(numero,piso_id) VALUES('113',1);
+INSERT INTO CONSULTORIO(numero,piso_id) VALUES('114',1);
+INSERT INTO CONSULTORIO(numero,piso_id) VALUES('115',1);
+INSERT INTO CONSULTORIO(numero,piso_id) VALUES('Odontologia',2);
+INSERT INTO CONSULTORIO(numero,piso_id) VALUES('P1',2);
+INSERT INTO CONSULTORIO(numero,piso_id) VALUES('201',2);
+INSERT INTO CONSULTORIO(numero,piso_id) VALUES('204',2);
+INSERT INTO CONSULTORIO(numero,piso_id) VALUES('205',2);
+INSERT INTO CONSULTORIO(numero,piso_id) VALUES('207',2);
+INSERT INTO CONSULTORIO(numero,piso_id) VALUES('208',2);
+INSERT INTO CONSULTORIO(numero,piso_id) VALUES('209',2);
+INSERT INTO CONSULTORIO(numero,piso_id) VALUES('210',2);
+INSERT INTO CONSULTORIO(numero,piso_id) VALUES('211',2);
+INSERT INTO CONSULTORIO(numero,piso_id) VALUES('1',3);
+INSERT INTO CONSULTORIO(numero,piso_id) VALUES('3',3);
+INSERT INTO CONSULTORIO(numero,piso_id) VALUES('4',3);
+INSERT INTO CONSULTORIO(numero,piso_id) VALUES('5',3);
+INSERT INTO CONSULTORIO(numero,piso_id) VALUES('6',3);
+INSERT INTO CONSULTORIO(numero,piso_id) VALUES('7',3);
+INSERT INTO CONSULTORIO(numero,piso_id) VALUES('8C',3);
+
 /*ESPECIALIDAD*/
 INSERT INTO ESPECIALIDAD(especialidad) VALUES('Alergología');
 INSERT INTO ESPECIALIDAD(especialidad) VALUES('Anestesiología');
@@ -536,6 +565,158 @@ INSERT INTO ESPECIALIDAD(especialidad) VALUES('Psicopedagogía');
 INSERT INTO ESPECIALIDAD(especialidad) VALUES('Terapia');
 INSERT INTO ESPECIALIDAD(especialidad) VALUES('Traumatología');
 INSERT INTO ESPECIALIDAD(especialidad) VALUES('Urología');
+
+/*DIA_ESPECIALIDAD*/
+INSERT INTO DIA_ESPECIALIDAD(especialidad_id,dia_id) VALUES(1,1);
+INSERT INTO DIA_ESPECIALIDAD(especialidad_id,dia_id) VALUES(4,1);
+INSERT INTO DIA_ESPECIALIDAD(especialidad_id,dia_id) VALUES(4,2);
+INSERT INTO DIA_ESPECIALIDAD(especialidad_id,dia_id) VALUES(4,3);
+INSERT INTO DIA_ESPECIALIDAD(especialidad_id,dia_id) VALUES(4,4);
+INSERT INTO DIA_ESPECIALIDAD(especialidad_id,dia_id) VALUES(4,5);
+INSERT INTO DIA_ESPECIALIDAD(especialidad_id,dia_id) VALUES(5,4);
+INSERT INTO DIA_ESPECIALIDAD(especialidad_id,dia_id) VALUES(6,4);
+INSERT INTO DIA_ESPECIALIDAD(especialidad_id,dia_id) VALUES(6,5);
+INSERT INTO DIA_ESPECIALIDAD(especialidad_id,dia_id) VALUES(7,4);
+INSERT INTO DIA_ESPECIALIDAD(especialidad_id,dia_id) VALUES(8,1);
+INSERT INTO DIA_ESPECIALIDAD(especialidad_id,dia_id) VALUES(8,3);
+INSERT INTO DIA_ESPECIALIDAD(especialidad_id,dia_id) VALUES(8,4);
+INSERT INTO DIA_ESPECIALIDAD(especialidad_id,dia_id) VALUES(9,1);
+INSERT INTO DIA_ESPECIALIDAD(especialidad_id,dia_id) VALUES(9,2);
+INSERT INTO DIA_ESPECIALIDAD(especialidad_id,dia_id) VALUES(9,3);
+INSERT INTO DIA_ESPECIALIDAD(especialidad_id,dia_id) VALUES(9,4);
+INSERT INTO DIA_ESPECIALIDAD(especialidad_id,dia_id) VALUES(9,5);
+INSERT INTO DIA_ESPECIALIDAD(especialidad_id,dia_id) VALUES(10,4);
+INSERT INTO DIA_ESPECIALIDAD(especialidad_id,dia_id) VALUES(11,1);
+INSERT INTO DIA_ESPECIALIDAD(especialidad_id,dia_id) VALUES(11,3);
+INSERT INTO DIA_ESPECIALIDAD(especialidad_id,dia_id) VALUES(11,4);
+INSERT INTO DIA_ESPECIALIDAD(especialidad_id,dia_id) VALUES(11,5);
+INSERT INTO DIA_ESPECIALIDAD(especialidad_id,dia_id) VALUES(12,2);
+INSERT INTO DIA_ESPECIALIDAD(especialidad_id,dia_id) VALUES(13,2);
+INSERT INTO DIA_ESPECIALIDAD(especialidad_id,dia_id) VALUES(14,2);
+INSERT INTO DIA_ESPECIALIDAD(especialidad_id,dia_id) VALUES(14,4);
+INSERT INTO DIA_ESPECIALIDAD(especialidad_id,,dia_id,e_secundaria) VALUES(14,5,'Artroscopia');
+INSERT INTO DIA_ESPECIALIDAD(especialidad_id,dia_id) VALUES(15,5);
+INSERT INTO DIA_ESPECIALIDAD(especialidad_id,dia_id) VALUES(16,5);
+
+/*HORA*/
+INSERT INTO HORA(desde,hasta,dia_id,medico_id) VALUES ('08:00','12:00',1,2);
+INSERT INTO HORA(desde,hasta,dia_id,medico_id) VALUES ('01:00','05:00',1,11);
+INSERT INTO HORA(desde,hasta,dia_id,medico_id) VALUES ('01:00','05:00',2,11);
+INSERT INTO HORA(desde,hasta,dia_id,medico_id) VALUES ('01:00','05:00',4,11);
+INSERT INTO HORA(desde,hasta,dia_id,medico_id) VALUES ('01:00','05:00',3,12);
+INSERT INTO HORA(desde,hasta,dia_id,medico_id) VALUES ('08:00','12:00',2,12);
+INSERT INTO HORA(desde,hasta,dia_id,medico_id) VALUES ('08:00','12:00',4,12);
+INSERT INTO HORA(desde,hasta,dia_id,medico_id) VALUES ('08:00','12:00',5,12);
+INSERT INTO HORA(desde,hasta,dia_id,medico_id) VALUES ('01:00','05:00',3,13);
+INSERT INTO HORA(desde,hasta,dia_id,medico_id) VALUES ('08:00','12:00',1,14);
+INSERT INTO HORA(desde,hasta,dia_id,medico_id) VALUES ('08:00','12:00',3,14);
+INSERT INTO HORA(desde,hasta,dia_id,medico_id) VALUES ('08:00','12:00',4,15);
+INSERT INTO HORA(desde,hasta,descripcion,dia_id,medico_id) VALUES ('08:00','12:00','niños',4,16);
+INSERT INTO HORA(desde,hasta,descripcion,dia_id,medico_id) VALUES ('08:00','12:00','adultos',4,16);
+INSERT INTO HORA(desde,hasta,descripcion,dia_id,medico_id) VALUES ('08:00','12:00','cada 15 dias',4,17);
+INSERT INTO HORA(desde,hasta,dia_id,medico_id) VALUES ('08:00','12:00',1,20);
+INSERT INTO HORA(desde,hasta,dia_id,medico_id) VALUES ('01:00','05:00',3,19);
+INSERT INTO HORA(desde,hasta,dia_id,medico_id) VALUES ('08:00','12:00',4,21);
+INSERT INTO HORA(desde,hasta,dia_id,medico_id) VALUES ('08:00','12:00',4,23);
+INSERT INTO HORA(desde,hasta,dia_id,medico_id) VALUES ('01:00','05:00',2,23);
+INSERT INTO HORA(desde,hasta,dia_id,medico_id) VALUES ('08:00','12:00',3,24);
+INSERT INTO HORA(desde,hasta,dia_id,medico_id) VALUES ('08:00','12:00',1,27);
+INSERT INTO HORA(desde,hasta,dia_id,medico_id) VALUES ('08:00','12:00',5,27);
+INSERT INTO HORA(desde,hasta,dia_id,medico_id) VALUES ('08:00','12:00',2,28);
+INSERT INTO HORA(desde,hasta,dia_id,medico_id) VALUES ('08:00','12:00',3,28);
+INSERT INTO HORA(desde,hasta,dia_id,medico_id) VALUES ('08:00','12:00',2,30);
+INSERT INTO HORA(desde,hasta,dia_id,medico_id) VALUES ('08:00','12:00',3,30);
+INSERT INTO HORA(desde,hasta,dia_id,medico_id) VALUES ('01:00','05:00',3,30);
+INSERT INTO HORA(desde,hasta,dia_id,medico_id) VALUES ('08:00','12:00',4,30);
+INSERT INTO HORA(desde,hasta,dia_id,medico_id) VALUES ('08:00','01:00',1,32);
+INSERT INTO HORA(desde,hasta,dia_id,medico_id) VALUES ('08:00','01:00',5,32);
+INSERT INTO HORA(desde,hasta,dia_id,medico_id) VALUES ('08:00','12:00',4,33);
+INSERT INTO HORA(desde,hasta,dia_id,medico_id) VALUES ('08:00','12:00',4,34);
+INSERT INTO HORA(desde,hasta,dia_id,medico_id) VALUES ('08:00','12:00',4,35);
+INSERT INTO HORA(desde,hasta,dia_id,medico_id) VALUES ('08:00','12:00',4,36);
+INSERT INTO HORA(desde,hasta,dia_id,medico_id) VALUES ('08:00','12:00',1,25);
+INSERT INTO HORA(desde,hasta,dia_id,medico_id) VALUES ('08:00','12:00',3,25);
+INSERT INTO HORA(desde,hasta,dia_id,medico_id) VALUES ('08:00','12:00',4,25);
+INSERT INTO HORA(desde,hasta,dia_id,medico_id) VALUES ('01:00','05:00',4,37);
+INSERT INTO HORA(desde,hasta,dia_id,medico_id) VALUES ('08:00','12:00',3,38);
+INSERT INTO HORA(desde,hasta,dia_id,medico_id) VALUES ('08:00','12:00',1,39);
+INSERT INTO HORA(desde,hasta,dia_id,medico_id) VALUES ('08:00','12:00',3,39);
+INSERT INTO HORA(desde,hasta,dia_id,medico_id) VALUES ('08:00','12:00',2,40);
+INSERT INTO HORA(desde,hasta,dia_id,medico_id) VALUES ('08:00','12:00',3,41);
+INSERT INTO HORA(desde,hasta,dia_id,medico_id) VALUES ('01:00','05:00',2,42);
+INSERT INTO HORA(desde,hasta,dia_id,medico_id) VALUES ('08:00','12:00',2,22);
+INSERT INTO HORA(desde,hasta,dia_id,medico_id) VALUES ('01:00','05:00',2,31);
+INSERT INTO HORA(desde,hasta,dia_id,medico_id) VALUES ('01:00','05:00',4,31);
+INSERT INTO HORA(desde,hasta,dia_id,medico_id) VALUES ('08:00','01:00',5,43);
+INSERT INTO HORA(desde,hasta,dia_id,medico_id) VALUES ('08:00','01:00',1,44);
+
+/*MEDICO_CONSULTORIO*/
+INSERT INTO MEDICO_CONSULTORIO(medico_id,consultorio_id) VALUES(2,5);
+INSERT INTO MEDICO_CONSULTORIO(medico_id,consultorio_id) VALUES(13,8);
+INSERT INTO MEDICO_CONSULTORIO(medico_id,consultorio_id) VALUES(14,8);
+INSERT INTO MEDICO_CONSULTORIO(medico_id,consultorio_id) VALUES(15,12);
+INSERT INTO MEDICO_CONSULTORIO(medico_id,consultorio_id) VALUES(16,15);
+INSERT INTO MEDICO_CONSULTORIO(medico_id,consultorio_id) VALUES(17,8);
+INSERT INTO MEDICO_CONSULTORIO(medico_id,consultorio_id) VALUES(20,19);
+INSERT INTO MEDICO_CONSULTORIO(medico_id,consultorio_id) VALUES(19,19);
+INSERT INTO MEDICO_CONSULTORIO(medico_id,consultorio_id) VALUES(21,19);
+INSERT INTO MEDICO_CONSULTORIO(medico_id,consultorio_id) VALUES(23,20);
+INSERT INTO MEDICO_CONSULTORIO(medico_id,consultorio_id) VALUES(24,6);
+INSERT INTO MEDICO_CONSULTORIO(medico_id,consultorio_id) VALUES(27,10);
+INSERT INTO MEDICO_CONSULTORIO(medico_id,consultorio_id) VALUES(28,27);
+INSERT INTO MEDICO_CONSULTORIO(medico_id,consultorio_id) VALUES(30,10);
+INSERT INTO MEDICO_CONSULTORIO(medico_id,consultorio_id) VALUES(32,15);
+INSERT INTO MEDICO_CONSULTORIO(medico_id,consultorio_id) VALUES(33,8);
+INSERT INTO MEDICO_CONSULTORIO(medico_id,consultorio_id) VALUES(34,16);
+INSERT INTO MEDICO_CONSULTORIO(medico_id,consultorio_id) VALUES(35,8);
+INSERT INTO MEDICO_CONSULTORIO(medico_id,consultorio_id) VALUES(36,8);
+INSERT INTO MEDICO_CONSULTORIO(medico_id,consultorio_id) VALUES(25,11);
+INSERT INTO MEDICO_CONSULTORIO(medico_id,consultorio_id) VALUES(37,11);
+INSERT INTO MEDICO_CONSULTORIO(medico_id,consultorio_id) VALUES(38,28);
+INSERT INTO MEDICO_CONSULTORIO(medico_id,consultorio_id) VALUES(39,9);
+INSERT INTO MEDICO_CONSULTORIO(medico_id,consultorio_id) VALUES(40,19);
+INSERT INTO MEDICO_CONSULTORIO(medico_id,consultorio_id) VALUES(41,20);
+INSERT INTO MEDICO_CONSULTORIO(medico_id,consultorio_id) VALUES(42,5);
+INSERT INTO MEDICO_CONSULTORIO(medico_id,consultorio_id) VALUES(22,9);
+INSERT INTO MEDICO_CONSULTORIO(medico_id,consultorio_id) VALUES(31,6);
+INSERT INTO MEDICO_CONSULTORIO(medico_id,consultorio_id) VALUES(31,10);
+INSERT INTO MEDICO_CONSULTORIO(medico_id,consultorio_id) VALUES(44,12);
+
+/*DIA_CONSULTORIO*/
+INSERT INTO DIA_CONSULTORIO(dia_id,consultorio_id) VALUES(1,5);
+INSERT INTO DIA_CONSULTORIO(dia_id,consultorio_id) VALUES(1,8);
+INSERT INTO DIA_CONSULTORIO(dia_id,consultorio_id) VALUES(3,8);
+INSERT INTO DIA_CONSULTORIO(dia_id,consultorio_id) VALUES(4,8);
+INSERT INTO DIA_CONSULTORIO(dia_id,consultorio_id) VALUES(4,12);
+INSERT INTO DIA_CONSULTORIO(dia_id,consultorio_id) VALUES(1,15);
+INSERT INTO DIA_CONSULTORIO(dia_id,consultorio_id) VALUES(4,15);
+INSERT INTO DIA_CONSULTORIO(dia_id,consultorio_id) VALUES(5,15);
+INSERT INTO DIA_CONSULTORIO(dia_id,consultorio_id) VALUES(1,19);
+INSERT INTO DIA_CONSULTORIO(dia_id,consultorio_id) VALUES(3,19);
+INSERT INTO DIA_CONSULTORIO(dia_id,consultorio_id) VALUES(4,19);
+INSERT INTO DIA_CONSULTORIO(dia_id,consultorio_id) VALUES(1,10);
+INSERT INTO DIA_CONSULTORIO(dia_id,consultorio_id) VALUES(5,10);
+INSERT INTO DIA_CONSULTORIO(dia_id,consultorio_id) VALUES(2,27);
+INSERT INTO DIA_CONSULTORIO(dia_id,consultorio_id) VALUES(3,27);
+INSERT INTO DIA_CONSULTORIO(dia_id,consultorio_id) VALUES(2,10);
+INSERT INTO DIA_CONSULTORIO(dia_id,consultorio_id) VALUES(3,10);
+INSERT INTO DIA_CONSULTORIO(dia_id,consultorio_id) VALUES(4,10);
+INSERT INTO DIA_CONSULTORIO(dia_id,consultorio_id) VALUES(4,16);
+INSERT INTO DIA_CONSULTORIO(dia_id,consultorio_id) VALUES(1,11);
+INSERT INTO DIA_CONSULTORIO(dia_id,consultorio_id) VALUES(3,11);
+INSERT INTO DIA_CONSULTORIO(dia_id,consultorio_id) VALUES(4,11);
+INSERT INTO DIA_CONSULTORIO(dia_id,consultorio_id) VALUES(5,11);
+INSERT INTO DIA_CONSULTORIO(dia_id,consultorio_id) VALUES(3,28);
+INSERT INTO DIA_CONSULTORIO(dia_id,consultorio_id) VALUES(1,9);
+INSERT INTO DIA_CONSULTORIO(dia_id,consultorio_id) VALUES(3,9);
+INSERT INTO DIA_CONSULTORIO(dia_id,consultorio_id) VALUES(2,19);
+INSERT INTO DIA_CONSULTORIO(dia_id,consultorio_id) VALUES(3,20);
+INSERT INTO DIA_CONSULTORIO(dia_id,consultorio_id) VALUES(2,5);
+INSERT INTO DIA_CONSULTORIO(dia_id,consultorio_id) VALUES(2,9);
+INSERT INTO DIA_CONSULTORIO(dia_id,consultorio_id) VALUES(2,6);
+INSERT INTO DIA_CONSULTORIO(dia_id,consultorio_id) VALUES(4,6);
+INSERT INTO DIA_CONSULTORIO(dia_id,consultorio_id) VALUES(1,12);
+
 
 /*CARGO*/
 INSERT INTO CARGO(medico_id,especialidad_id,cargo) VALUES(1,1,'DR');
