@@ -66,7 +66,7 @@ CREATE TABLE PISO (
 /*==============================================================*/
 CREATE TABLE CONSULTORIO(
     id_consultorio SERIAL NOT NULL PRIMARY KEY,
-    numero VARCHAR(5) NOT NULL,
+    numero VARCHAR(50) NOT NULL,
     referencia VARCHAR(70) NULL,
     piso_id INTEGER NOT NULL,
     CONSTRAINT FK_CONSULTORIO_PISO FOREIGN KEY (piso_id) REFERENCES PISO (id_piso) ON DELETE CASCADE 
@@ -77,19 +77,9 @@ CREATE TABLE CONSULTORIO(
 CREATE TABLE MEDICO_CONSULTORIO(
     id_me_co SERIAL NOT NULL PRIMARY KEY,
     medico_id INTEGER NOT NULL,
-    consultorio_id INTEGER NOT NULL,
+    consultorio_id INTEGER NULL,
     CONSTRAINT FK_MECO_MEDICO FOREIGN KEY (medico_id) REFERENCES MEDICO (id_medico) ON DELETE CASCADE,
     CONSTRAINT FK_MECO_CONSULTORIO FOREIGN KEY (consultorio_id) REFERENCES CONSULTORIO (id_consultorio) ON DELETE CASCADE
-);
-
-/*==============================================================*/
-/* Table: HORA                                                  */
-/*==============================================================*/
-CREATE TABLE HORA (
-    id_hora SERIAL NOT NULL PRIMARY KEY,
-    desde TIME NOT NULL,
-    hasta TIME NULL,
-    descripcion VARCHAR(50) NULL
 );
 
 /*==============================================================*/
@@ -101,26 +91,17 @@ CREATE TABLE DIA (
 );
 
 /*==============================================================*/
-/* Table: CONDICION                                             */
+/* Table: HORA                                                  */
 /*==============================================================*/
-CREATE TABLE CONDICION (
-    id_condicion SERIAL NOT NULL PRIMARY KEY,
-    condicion VARCHAR(50) NOT NULL,
+CREATE TABLE HORA (
+    id_hora SERIAL NOT NULL PRIMARY KEY,
+    desde TIME NOT NULL,
+    hasta TIME NULL,
+    descripcion VARCHAR(50) NULL,
     dia_id INTEGER NOT NULL,
     medico_id INTEGER NOT NULL,
-    CONSTRAINT FK_CONDICION_DIA FOREIGN KEY (dia_id) REFERENCES DIA (id_dia) ON DELETE CASCADE,
-    CONSTRAINT FK_CONDICION_MEDICO FOREIGN KEY (medico_id) REFERENCES MEDICO (id_medico) ON DELETE CASCADE
-);
-
-/*==============================================================*/
-/* Table: DIA_HORA                                              */
-/*==============================================================*/
-CREATE TABLE DIA_HORA(
-    id_dia_hor SERIAL NOT NULL PRIMARY KEY,
-    dia_id INTEGER NOT NULL,
-    hora_id INTEGER NOT NULL,
-    CONSTRAINT FK_DIHO_DIA FOREIGN KEY (dia_id) REFERENCES DIA (id_dia) ON DELETE CASCADE,
-    CONSTRAINT FK_DIHO_HORA FOREIGN KEY (hora_id) REFERENCES HORA (id_hora) ON DELETE CASCADE
+    CONSTRAINT FK_HORA_DIA FOREIGN KEY (dia_id) REFERENCES DIA (id_dia) ON DELETE CASCADE,
+    CONSTRAINT FK_HORA_MEDICO FOREIGN KEY (medico_id) REFERENCES MEDICO (id_medico) ON DELETE CASCADE
 
 );
 
@@ -136,13 +117,14 @@ CREATE TABLE DIA_CONSULTORIO (
 );
 
 /*==============================================================*/
-/* Table: DIA_CONSULTORIO                                       */
+/* Table: DIA_ESPECIALIDAD                                       */
 /*==============================================================*/
 CREATE TABLE DIA_ESPECIALIDAD(
     id_dia_esp SERIAL NOT NULL PRIMARY KEY,
     especialidad_id INTEGER NOT NULL,
     dia_id INTEGER NOT NULL,
+    e_secundaria VARCHAR(50) NULL,
     CONSTRAINT FK_DIAESP_DIA FOREIGN KEY (dia_id) REFERENCES DIA (id_dia) ON DELETE CASCADE,
-    CONSTRAINT FK_DIACON_ESPECIALIDAD FOREIGN KEY (especialidad_id) REFERENCES ESPECIALIDAD (id_especialidad) ON DELETE CASCADE,
+    CONSTRAINT FK_DIACON_ESPECIALIDAD FOREIGN KEY (especialidad_id) REFERENCES ESPECIALIDAD (id_especialidad) ON DELETE CASCADE
 
 );
