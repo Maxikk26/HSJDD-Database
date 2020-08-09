@@ -45,11 +45,21 @@ CREATE TABLE ESPECIALIDAD (
 /*==============================================================*/
 CREATE TABLE CARGO (
     id_cargo SERIAL NOT NULL PRIMARY KEY,
+    cargo VARCHAR(5) NOT NULL
+);
+
+/*==============================================================*/
+/* Table: PERTENENCIA                                           */
+/*==============================================================*/
+
+CREATE TABLE PERTENENCIA(
+    id_pertenencia SERIAL NOT NULL PRIMARY KEY,
     medico_id INTEGER NOT NULL,
     especialidad_id INTEGER NOT NULL,
-    cargo VARCHAR(5) NOT NULL,
-    CONSTRAINT FK_CARGO_MEDICO FOREIGN KEY (medico_id) REFERENCES MEDICO (id_medico) ON DELETE CASCADE,
-    CONSTRAINT FK_CARGO_ESPECIALIDAD FOREIGN KEY (especialidad_id) REFERENCES ESPECIALIDAD (id_especialidad) ON DELETE CASCADE
+    cargo_id INTEGER NOT NULL,
+    CONSTRAINT FK_PERTENENCIA_MEDICO FOREIGN KEY (medico_id) REFERENCES MEDICO (id_medico) ON DELETE CASCADE,
+    CONSTRAINT FK_PERTENENCIA_CARGO FOREIGN KEY (cargo_id) REFERENCES CARGO (id_cargo) ON DELETE CASCADE,
+    CONSTRAINT FK_PERTENENCIA_ESPECIALIDAD FOREIGN KEY (especialidad_id) REFERENCES ESPECIALIDAD (id_especialidad) ON DELETE CASCADE
 );
 
 /*==============================================================*/
@@ -93,15 +103,24 @@ CREATE TABLE DIA (
 /*==============================================================*/
 /* Table: HORA                                                  */
 /*==============================================================*/
-CREATE TABLE HORA (
+CREATE TABLE HORA(
     id_hora SERIAL NOT NULL PRIMARY KEY,
     desde TIME NOT NULL,
-    hasta TIME NULL,
+    hasta TIME NOT NULL
+);
+
+/*==============================================================*/
+/* Table: ASISTENCIA                                            */
+/*==============================================================*/
+CREATE TABLE ASISTENCIA (
+    id_asistencia SERIAL NOT NULL PRIMARY KEY,
     descripcion VARCHAR(50) NULL,
     dia_id INTEGER NOT NULL,
     medico_id INTEGER NOT NULL,
-    CONSTRAINT FK_HORA_DIA FOREIGN KEY (dia_id) REFERENCES DIA (id_dia) ON DELETE CASCADE,
-    CONSTRAINT FK_HORA_MEDICO FOREIGN KEY (medico_id) REFERENCES MEDICO (id_medico) ON DELETE CASCADE
+    hora_id INTEGER NULL,
+    CONSTRAINT FK_ASISTENCIA_DIA FOREIGN KEY (dia_id) REFERENCES DIA (id_dia) ON DELETE CASCADE,
+    CONSTRAINT FK_ASISTENCIA_MEDICO FOREIGN KEY (medico_id) REFERENCES MEDICO (id_medico) ON DELETE CASCADE,
+    CONSTRAINT FK_ASISTENCIA_HORA FOREIGN KEY (hora_id) REFERENCES HORA (id_hora) ON DELETE CASCADE
 
 );
 
