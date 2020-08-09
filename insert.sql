@@ -1205,7 +1205,7 @@ INSERT INTO CARGO(cargo) VALUES('DR');
 INSERT INTO CARGO(cargo) VALUES('TEC');
 INSERT INTO CARGO(cargo) VALUES('LIC');
 
-/*CARGO*/
+/*PERTENENCIA*/
 INSERT INTO PERTENENCIA(medico_id,especialidad_id,cargo_id,e_secundaria) VALUES(1,1,2,'Inmunología');
 INSERT INTO PERTENENCIA(medico_id,especialidad_id,cargo_id) VALUES(2,1,1);
 INSERT INTO PERTENENCIA(medico_id,especialidad_id,cargo_id,e_secundaria) VALUES(3,2,1,'Quirófano');
