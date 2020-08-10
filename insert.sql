@@ -1342,37 +1342,3 @@ INSERT INTO PERTENENCIA(medico_id,especialidad_id,cargo_id,e_secundaria) VALUES(
 INSERT INTO PERTENENCIA(medico_id,especialidad_id,cargo_id,e_secundaria) VALUES(125,45,2,'Adultos');
 INSERT INTO PERTENENCIA(medico_id,especialidad_id,cargo_id,e_secundaria) VALUES(126,45,1,'Pediatrica');
 INSERT INTO PERTENENCIA(medico_id,especialidad_id,cargo_id,e_secundaria) VALUES(127,45,2,'Infantil');
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
