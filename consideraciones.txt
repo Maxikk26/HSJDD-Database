@@ -1,0 +1,12 @@
+Consideraciones de consultas:
+- No hay Telefono
+- No hay Correo
+- Solo Especialidad
+- Especialidad y Horario
+- Especialidad, Horario y Consultorio
+
+Referentes a tablas de la BD:
+- Consulta sin N-N de Asistencia en caso de no tener Horario
+- Consulta sin N-N de Medico_Consultorio
+- Consulta sin Telefono
+- Consulta sin Correo
