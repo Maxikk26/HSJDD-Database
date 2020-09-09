@@ -1,28 +1,3 @@
-CREATE OR REPLACE PROCEDURE main()
-AS $$
-DECLARE
-    myrow RECORD;
-    Cespecialidad CURSOR FOR SELECT CA.cargo, traermedico(ME.id_medico),traerespecialidad(ME.id_medico,CA.id_cargo,ES.id_especialidad),
-                                    traertelefonos(ME.id_medico), traercorreos(ME.id_medico) 
-                             FROM MEDICO ME, CARGO CA, ESPECIALIDAD ES, PERTENENCIA PE
-                             WHERE ME.id_medico = PE.medico_id
-                             AND PE.cargo_id = CA.id_cargo
-                             AND PE.especialidad_id = ES.id_especialidad;
-    
-    tel VARCHAR(150);
-    id INTEGER;
-BEGIN
-    RAISE NOTICE 'CREANDO CURSOR'; 
-    OPEN Cespecialidad;
-    FETCH Cespecialidad INTO myrow;
-    LOOP
-		RAISE NOTICE 'CONTENT: %',myrow; 
-        FETCH Cespecialidad INTO myrow;
-        EXIT WHEN NOT FOUND;
-    END LOOP;
-END;
-$$ LANGUAGE plpgsql;
-
 CREATE OR REPLACE FUNCTION traermedico(INTEGER) RETURNS VARCHAR
 AS $$
 DECLARE
@@ -38,9 +13,9 @@ BEGIN
         string:= datos.p_nombre || ',';
     END IF; 
     IF datos.s_apellido IS NOT NULL THEN
-        string:= string || datos.p_apellido || ' ' || datos.s_apellido;
+        string:= string || ' ' || datos.p_apellido || ' ' || datos.s_apellido;
     ELSE
-        string:= string || datos.p_apellido;
+        string:= string || ' ' || datos.p_apellido;
     END IF; 
     RETURN string;
 END;
@@ -69,7 +44,7 @@ BEGIN
             tel:= datos;
             cont:= cont + 1;
         ELSE
-            tel:= tel || ', ' || datos;
+            tel:= tel || ' ' || datos;
         END IF;
         FETCH Ctelefono INTO datos;
         EXIT WHEN NOT FOUND;
@@ -111,10 +86,127 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION traerespecialidad(cargo INTEGER, medico INTEGER, especialidad INTEGER) RETURNS VARCHAR
+CREATE OR REPLACE FUNCTION traerespecialidad(medico INTEGER, idesp INTEGER) RETURNS VARCHAR
 AS $$
 DECLARE
+    datos RECORD;
+	str VARCHAR(70);
 BEGIN
+    SELECT ES.especialidad, PE.e_secundaria INTO datos
+        FROM ESPECIALIDAD ES, PERTENENCIA PE, CARGO CA, MEDICO ME
+        WHERE ME.id_medico = PE.medico_id
+        AND CA.id_cargo = PE.cargo_id
+        AND ES.id_especialidad = PE.especialidad_id
+        AND ME.id_medico = medico
+        AND ES.id_especialidad = idesp;
+	str:= datos.especialidad;
+	IF datos.e_secundaria IS NOT NULL THEN
+		str:= str || ' ' || datos.e_secundaria;
+	END IF;
+    --RAISE NOTICE 'str especialidad: %',str;
+    RETURN str;
 
 END;
 $$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION traerhorario(idmed INTEGER, idesp INTEGER) RETURNS VARCHAR
+AS $$
+DECLARE
+    Cconsultorio CURSOR FOR SELECT DI.dia, to_char(HO.desde,'HH12:MI') AS desde, to_char(HO.hasta,'HH12:MI') AS hasta
+                                FROM MEDICO ME, DIA_ESPECIALIDAD DE, ESPECIALIDAD ES, DIA DI, ASISTENCIA AI, HORA HO
+                                WHERE ES.id_especialidad = DE.especialidad_id
+                                AND DI.id_dia = DE.dia_id
+                                AND ME.id_medico = AI.medico_id
+                                AND DI.id_dia = AI.dia_id
+                                AND HO.id_hora = AI.hora_id
+                                AND ME.id_medico = idmed
+                                AND ES.id_especialidad = idesp ORDER BY HO.desde;
+    consulta RECORD;
+    datos RECORD;
+    str VARCHAR(200);
+    cont INTEGER := 0;
+BEGIN
+    OPEN Cconsultorio;
+    FETCH Cconsultorio INTO consulta;
+    LOOP
+        IF cont <> 0 THEN
+            IF datos.desde = consulta.desde THEN
+                str:= str || ', ' || consulta.dia;
+                cont:=1;
+            ELSE
+                str:= str || ' ' || datos.desde || '-' || datos.hasta || ' y ' || consulta.dia ;
+                cont:= 2;
+            END IF;
+        ELSE
+            str:= consulta.dia;
+            cont:= 1;
+        END IF;
+        datos:= consulta;
+        FETCH Cconsultorio INTO consulta;
+        EXIT WHEN NOT FOUND;
+    END LOOP;
+    IF cont = 2 THEN
+        str:= datos.dia || ' ' || datos.desde || '-' || datos.hasta;
+    ELSE
+        str:= str || ' ' || datos.desde || '-' || datos.hasta;
+    END IF;
+    --RAISE NOTICE 'str horario: %',str;
+    CLOSE Cconsultorio;
+    cont:= 0;
+    IF str IS NULL THEN
+        str:= '-';
+    END IF;
+    RETURN str;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION traerconsultorio(idmed INTEGER) RETURNS VARCHAR
+AS $$
+DECLARE
+    Cconsulta CURSOR FOR SELECT CO.numero, PI.piso, PI.numero AS pisonumero, CO.referencia
+                            FROM CONSULTORIO CO, PISO PI, MEDICO ME, MEDICO_CONSULTORIO MC
+                            WHERE CO.id_consultorio = MC.consultorio_id
+                            AND PI.id_piso = CO.piso_id
+                            AND ME.id_medico = MC.medico_id
+                            AND ME.id_medico = idmed;
+    datos RECORD;
+    str VARCHAR(75);
+    cont INTEGER := 0;
+BEGIN
+    OPEN Cconsulta;
+    FETCH Cconsulta INTO datos;
+    LOOP
+        IF cont = 0 THEN
+            str:= datos.numero || E'\n' || datos.piso ;
+            cont:= 1;
+        ELSE
+            str:= str || ' y ' || datos.numero || E'\n'  || datos.piso;
+        END IF;
+        IF datos.pisonumero IS NOT NULL THEN
+            str:= str || ' ' || datos.pisonumero || E'\n';
+        ELSEIF datos.referencia IS NOT NULL THEN
+            str:= str || '. ' || datos.referencia || E'\n';
+        END IF;
+        --RAISE NOTICE 'str consultorio: %', str;
+        FETCH Cconsulta INTO datos;
+        EXIT WHEN NOT FOUND;
+    END LOOP;
+    CLOSE Cconsulta;
+    IF str IS NULL THEN
+        str:= '-';
+    END IF;
+    RETURN str;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION reporte() RETURNS TABLE(MEDICO TEXT, ESPECIALIDAD VARCHAR, HORARIO VARCHAR, CONSULTORIO VARCHAR, TELEFONO VARCHAR, CORREO VARCHAR)
+AS $func$
+BEGIN
+	RETURN QUERY SELECT CA.cargo || ' ' || traermedico(ME.id_medico) AS  MEDICO,traerespecialidad(ME.id_medico,ES.id_especialidad) AS ESPECIALIDAD,traerhorario(ME.id_medico,ES.id_especialidad) AS HORARIO,
+                                    traerconsultorio(ME.id_medico) AS CONSULTORIO ,traertelefonos(ME.id_medico) AS TELEFONO, traercorreos(ME.id_medico) AS CORREO
+                             FROM MEDICO ME, CARGO CA, ESPECIALIDAD ES, PERTENENCIA PE
+                             WHERE ME.id_medico = PE.medico_id
+                             AND PE.cargo_id = CA.id_cargo
+                             AND PE.especialidad_id = ES.id_especialidad;
+END;
+$func$ LANGUAGE plpgsql;

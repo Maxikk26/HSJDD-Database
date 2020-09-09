@@ -726,12 +726,10 @@ INSERT INTO ASISTENCIA(hora_id,dia_id,medico_id) VALUES (2,3,13);
 INSERT INTO ASISTENCIA(hora_id,dia_id,medico_id) VALUES (1,2,13);
 INSERT INTO ASISTENCIA(hora_id,dia_id,medico_id) VALUES (1,4,13);
 INSERT INTO ASISTENCIA(hora_id,dia_id,medico_id) VALUES (1,5,13);
-INSERT INTO ASISTENCIA(hora_id,dia_id,medico_id) VALUES (2,3,13);
 INSERT INTO ASISTENCIA(hora_id,dia_id,medico_id) VALUES (1,1,14);
 INSERT INTO ASISTENCIA(hora_id,dia_id,medico_id) VALUES (1,3,14);
-INSERT INTO ASISTENCIA(hora_id,dia_id,medico_id) VALUES (1,4,16);
 INSERT INTO ASISTENCIA(hora_id,descripcion,dia_id,medico_id) VALUES (1,'niños',4,16);
-INSERT INTO ASISTENCIA(hora_id,descripcion,dia_id,medico_id) VALUES (1,'adultos',4,16);
+INSERT INTO ASISTENCIA(hora_id,descripcion,dia_id,medico_id) VALUES (1,'adultos',5,16);
 INSERT INTO ASISTENCIA(hora_id,descripcion,dia_id,medico_id) VALUES (1,'cada 15 dias',4,17);
 INSERT INTO ASISTENCIA(hora_id,dia_id,medico_id) VALUES (1,1,21);
 INSERT INTO ASISTENCIA(hora_id,dia_id,medico_id) VALUES (2,3,20);
@@ -1200,10 +1198,10 @@ INSERT INTO DIA_CONSULTORIO(dia_id,consultorio_id) VALUES(4,29);
 INSERT INTO DIA_CONSULTORIO(dia_id,consultorio_id) VALUES(5,29);
 
 /*CARGO*/
-INSERT INTO CARGO(cargo) VALUES('DRA');
-INSERT INTO CARGO(cargo) VALUES('DR');
-INSERT INTO CARGO(cargo) VALUES('TEC');
-INSERT INTO CARGO(cargo) VALUES('LIC');
+INSERT INTO CARGO(cargo) VALUES('Dra.');
+INSERT INTO CARGO(cargo) VALUES('Dr.');
+INSERT INTO CARGO(cargo) VALUES('Tec.');
+INSERT INTO CARGO(cargo) VALUES('Lic.');
 
 /*PERTENENCIA*/
 INSERT INTO PERTENENCIA(medico_id,especialidad_id,cargo_id,e_secundaria) VALUES(1,1,2,'Inmunología');
