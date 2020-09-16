@@ -210,3 +210,21 @@ BEGIN
                              AND PE.especialidad_id = ES.id_especialidad;
 END;
 $func$ LANGUAGE plpgsql;
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--FUNCIONES DE LA APP
+
+CREATE OR REPLACE FUNCTION eliminarMedicoId(idmed INTEGER) RETURNS BOOLEAN
+AS $$
+DECLARE
+    medicoRow RECORD;
+BEGIN
+    SELECT * FROM medico ME INTO medicoRow WHERE ME.id_medico = idmed AND ME.estatus = true;
+    IF medicoRow.id_medico <> 0 THEN
+        UPDATE medico SET estatus = false WHERE id_medico = idmed;
+        RETURN true;
+    ELSE
+        RETURN false;
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
