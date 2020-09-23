@@ -207,7 +207,7 @@ BEGIN
                              FROM MEDICO ME, CARGO CA, ESPECIALIDAD ES, PERTENENCIA PE
                              WHERE ME.id_medico = PE.medico_id
                              AND PE.cargo_id = CA.id_cargo
-                             AND PE.especialidad_id = ES.id_especialidad;
+                             AND PE.especialidad_id = ES.id_especialidad ORDER BY ES.especialidad;
 END;
 $func$ LANGUAGE plpgsql;
 
@@ -226,5 +226,84 @@ BEGIN
     ELSE
         RETURN false;
     END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION insertarMedico(cedula VARCHAR, pnombre VARCHAR, snombre VARCHAR, papellido VARCHAR, sapellido VARCHAR) RETURNS BOOLEAN
+AS $$
+BEGIN
+    INSERT INTO MEDICO(cedula,p_nombre,s_nombre,p_apellido,s_apellido) VALUES (cedula,pnombre,snombre,papellido,sapellido);
+    RETURN FOUND;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION insertarTelefono(ced VARCHAR, tel VARCHAR) RETURNS BOOLEAN
+AS $$
+DECLARE
+    idmed INTEGER;
+BEGIN
+    SELECT ME.id_medico INTO idmed FROM MEDICO ME WHERE ME.cedula = ced LIMIT 1;
+    INSERT INTO TELEFONO(telefono,medico_id) VALUES(tel,idmed);
+    RETURN FOUND;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION insertarCorreo(ced VARCHAR, cor VARCHAR) RETURNS BOOLEAN
+AS $$
+DECLARE
+    idmed INTEGER;
+BEGIN
+    SELECT ME.id_medico INTO idmed FROM MEDICO ME WHERE ME.cedula = ced LIMIT 1;
+    INSERT INTO CORREO(correo,medico_id) VALUES(cor,idmed);
+    RETURN FOUND;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION insertarMedicoConsultorio(ced VARCHAR, con VARCHAR) RETURNS BOOLEAN
+AS $$
+DECLARE
+    idmed INTEGER;
+    idcon INTEGER;
+BEGIN
+    SELECT ME.id_medico INTO idmed FROM medico ME WHERE ME.cedula = ced LIMIT 1;
+    SELECT CO.id_consultorio INTO idcon FROM consultorio CO WHERE CO.numero = con;
+    INSERT INTO MEDICO_CONSULTORIO(medico_id,consultorio_id) VALUES(idmed,idcon);
+    RETURN FOUND;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION insertarPertenencia(ced VARCHAR, car VARCHAR,esp VARCHAR,esec VARCHAR) RETURNS BOOLEAN
+AS $$
+DECLARE
+    idmed INTEGER;
+    idcar INTEGER;
+    idesp INTEGER;
+BEGIN
+    SELECT ME.id_medico INTO idmed FROM medico ME WHERE ME.cedula = ced LIMIT 1;
+    SELECT CA.id_cargo INTO idcar FROM cargo CA WHERE CA.cargo = car;
+    SELECT ES.id_especialidad INTO idesp FROM especialidad ES WHERE ES.especialidad = esp;
+    INSERT INTO PERTENENCIA(medico_id,especialidad_id,cargo_id,e_secundaria) VALUES(idmed,idesp,idcar,esec);
+    RETURN FOUND;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION insertarAsistencia(ced VARCHAR, desd VARCHAR,hast VARCHAR,di VARCHAR) RETURNS BOOLEAN
+AS $$
+DECLARE
+    idmed INTEGER;
+    idia INTEGER;
+    idhora INTEGER;
+	h1 TIME;
+	h2 TIME;
+BEGIN
+	h1:= to_timestamp(desd, 'HH12:MI');
+	h2:= to_timestamp(hast, 'HH12:MI');
+	--RAISE NOTICE 'str h1: %', h1;	
+	--RAISE NOTICE 'str h2: %', h2;
+    SELECT ME.id_medico INTO idmed FROM medico ME WHERE ME.cedula = ced LIMIT 1;
+    SELECT DA.id_dia INTO idia FROM dia DA WHERE DA.dia = di;
+    SELECT HO.id_hora INTO idhora FROM hora HO WHERE HO.desde = h1 AND HO.hasta = h2;
+    INSERT INTO ASISTENCIA(hora_id,dia_id,medico_id) VALUES(idhora,idia,idmed);
+    RETURN FOUND;
 END;
 $$ LANGUAGE plpgsql;
