@@ -229,11 +229,27 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION insertarMedico(cedula VARCHAR, pnombre VARCHAR, snombre VARCHAR, papellido VARCHAR, sapellido VARCHAR) RETURNS BOOLEAN
+CREATE OR REPLACE FUNCTION insertarMedico(ced VARCHAR, pnombre VARCHAR, snombre VARCHAR, papellido VARCHAR, sapellido VARCHAR) RETURNS INTEGER
 AS $$
-BEGIN
-    INSERT INTO MEDICO(cedula,p_nombre,s_nombre,p_apellido,s_apellido) VALUES (cedula,pnombre,snombre,papellido,sapellido);
-    RETURN FOUND;
+DECLARE
+    idmed INTEGER;
+    status BOOLEAN;
+BEGIN  
+    SELECT ME.id_medico INTO idmed FROM medico ME WHERE ME.cedula = ced;
+    IF idmed IS NULL THEN
+        INSERT INTO MEDICO(cedula,p_nombre,s_nombre,p_apellido,s_apellido) VALUES (ced,pnombre,snombre,papellido,sapellido);
+        RETURN 1;
+    ELSE
+        IF idmed > 0 THEN
+            SELECT ME.estatus INTO status FROM medico ME WHERE ME.id_medico = idmed;
+            IF status = FALSE THEN
+                UPDATE medico SET estatus = true WHERE id_medico = idmed;
+                RETURN 2;
+            ELSE
+                RETURN 3;
+            END IF;
+        END IF;
+    END IF;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -307,3 +323,58 @@ BEGIN
     RETURN FOUND;
 END;
 $$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION insertarEspecialidad(esp VARCHAR) RETURNS BOOLEAN
+AS $$
+DECLARE
+    idesp INTEGER;
+BEGIN
+    INSERT INTO ESPECIALIDAD(especialidad) VALUES(esp);
+    RETURN FOUND;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION insertarDiaEspecialidad(esp VARCHAR) RETURNS BOOLEAN
+AS $$
+DECLARE
+    idesp INTEGER;
+BEGIN
+    SELECT ES.id_especialidad INTO idesp FROM especialidad ES WHERE ES.especialidad = esp;
+    IF idesp IS NOT NULL THEN
+        INSERT INTO DIA_ESPECIALIDAD(especialidad_id,dia_id) VALUES(idesp,1);
+        INSERT INTO DIA_ESPECIALIDAD(especialidad_id,dia_id) VALUES(idesp,2);
+        INSERT INTO DIA_ESPECIALIDAD(especialidad_id,dia_id) VALUES(idesp,3);
+        INSERT INTO DIA_ESPECIALIDAD(especialidad_id,dia_id) VALUES(idesp,4);
+        INSERT INTO DIA_ESPECIALIDAD(especialidad_id,dia_id) VALUES(idesp,5);
+        RETURN FOUND;
+    END IF;
+    RETURN FALSE;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION validarConsultorio(con VARCHAR) RETURNS BOOLEAN
+AS $$
+DECLARE
+    cons RECORD;
+BEGIN
+    SELECT * INTO cons FROM consultorio CO WHERE CO.numero = con;
+    IF cons IS NULL THEN
+        RETURN TRUE;
+    ELSE
+        RETURN FALSE;
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION insertarConsultorio(con VARCHAR, pis VARCHAR) RETURNS BOOLEAN
+AS $$
+DECLARE
+    idpiso INTEGER;
+BEGIN
+    SELECT PI.id_piso INTO idpiso FROM piso PI WHERE PI.piso = pis;
+    RAISE NOTICE 'str idpiso: %', idpiso;	
+    INSERT INTO CONSULTORIO(numero,piso_id) VALUES(con,idpiso);
+    RETURN FOUND;
+END;
+$$ LANGUAGE plpgsql;
+
