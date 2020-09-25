@@ -303,6 +303,21 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION insertarPertenencia2(ced VARCHAR, car VARCHAR,esp VARCHAR) RETURNS BOOLEAN
+AS $$
+DECLARE
+    idmed INTEGER;
+    idcar INTEGER;
+    idesp INTEGER;
+BEGIN
+    SELECT ME.id_medico INTO idmed FROM medico ME WHERE ME.cedula = ced LIMIT 1;
+    SELECT CA.id_cargo INTO idcar FROM cargo CA WHERE CA.cargo = car;
+    SELECT ES.id_especialidad INTO idesp FROM especialidad ES WHERE ES.especialidad = esp;
+    INSERT INTO PERTENENCIA(medico_id,especialidad_id,cargo_id) VALUES(idmed,idesp,idcar);
+    RETURN FOUND;
+END;
+$$ LANGUAGE plpgsql;
+
 CREATE OR REPLACE FUNCTION insertarAsistencia(ced VARCHAR, desd VARCHAR,hast VARCHAR,di VARCHAR) RETURNS BOOLEAN
 AS $$
 DECLARE
@@ -372,7 +387,7 @@ DECLARE
     idpiso INTEGER;
 BEGIN
     SELECT PI.id_piso INTO idpiso FROM piso PI WHERE PI.piso = pis;
-    RAISE NOTICE 'str idpiso: %', idpiso;	
+    --RAISE NOTICE 'str idpiso: %', idpiso;	
     INSERT INTO CONSULTORIO(numero,piso_id) VALUES(con,idpiso);
     RETURN FOUND;
 END;
