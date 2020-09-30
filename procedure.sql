@@ -229,7 +229,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION insertarMedico(ced VARCHAR, pnombre VARCHAR, snombre VARCHAR, papellido VARCHAR, sapellido VARCHAR) RETURNS INTEGER
+CREATE OR REPLACE FUNCTION insertarMedico(ced VARCHAR, pnombre VARCHAR, snombre VARCHAR, papellido VARCHAR, sapellido VARCHAR, snombrestat VARCHAR) RETURNS INTEGER
 AS $$
 DECLARE
     idmed INTEGER;
@@ -237,8 +237,13 @@ DECLARE
 BEGIN  
     SELECT ME.id_medico INTO idmed FROM medico ME WHERE ME.cedula = ced;
     IF idmed IS NULL THEN
-        INSERT INTO MEDICO(cedula,p_nombre,s_nombre,p_apellido,s_apellido) VALUES (ced,pnombre,snombre,papellido,sapellido);
-        RETURN 1;
+        IF(snombrestat = 'false') THEN
+            INSERT INTO MEDICO(cedula,p_nombre,p_apellido,s_apellido) VALUES (ced,pnombre,papellido,sapellido);
+            RETURN 1;
+        ELSE
+            INSERT INTO MEDICO(cedula,p_nombre,s_nombre,p_apellido,s_apellido) VALUES (ced,pnombre,snombre,papellido,sapellido);
+            RETURN 1;
+        END IF;
     ELSE
         IF idmed > 0 THEN
             SELECT ME.estatus INTO status FROM medico ME WHERE ME.id_medico = idmed;
@@ -393,3 +398,70 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION insertarTelefonoID(idmedi VARCHAR, tel VARCHAR) RETURNS BOOLEAN
+AS $$
+DECLARE
+    idmed INTEGER;
+    idsec INTEGER;
+BEGIN
+    idsec:= CAST(idmedi as INTEGER);
+    SELECT id_medico INTO idmed FROM medico WHERE id_medico = idsec;
+    IF idmed IS NOT NULL THEN
+        INSERT INTO TELEFONO(telefono,medico_id) VALUES(tel,idmed);
+        RETURN FOUND;
+    ELSE
+        RETURN FALSE;
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION actualizarMedico1(idmedi VARCHAR, pnombre VARCHAR,snombre VARCHAR,papellido VARCHAR,sapellido VARCHAR) RETURNS BOOLEAN
+AS $$
+DECLARE
+    idmed INTEGER;
+    idsec INTEGER;
+BEGIN
+    idsec:= CAST(idmedi as INTEGER);
+    SELECT id_medico INTO idmed FROM medico WHERE id_medico = idsec;
+    IF idmed IS NOT NULL THEN
+        UPDATE medico SET p_nombre = pnombre, s_nombre = snombre, p_apellido = papellido, s_apellido = sapellido WHERE id_medico = idmed;
+        RETURN FOUND;
+    ELSE
+        RETURN FALSE;
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION actualizarMedico2(idmedi VARCHAR, pnombre VARCHAR,papellido VARCHAR,sapellido VARCHAR) RETURNS BOOLEAN
+AS $$
+DECLARE
+    idmed INTEGER;
+    idsec INTEGER;
+BEGIN
+    idsec:= CAST(idmedi AS INTEGER);
+    SELECT id_medico INTO idmed FROM medico WHERE id_medico = idsec;
+    IF idmed IS NOT NULL THEN
+        UPDATE medico SET p_nombre = pnombre, p_apellido = papellido, s_apellido = sapellido WHERE id_medico = idmed;
+        RETURN FOUND;
+    ELSE
+        RETURN FALSE;
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION actualizarCorreo(idmedi VARCHAR, correoin VARCHAR) RETURNS BOOLEAN
+AS $$ 
+DECLARE
+    idmed INTEGER;
+    idsec INTEGER;
+BEGIN
+    idsec:= CAST(idmedi AS INTEGER);
+    SELECT id_medico INTO idmed FROM medico WHERE id_medico = idsec;
+    IF idmed IS NOT NULL THEN
+        UPDATE correo SET correo = correoin WHERE medico_id = idmed;
+        RETURN FOUND;
+    ELSE 
+        RETURN FALSE;
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
