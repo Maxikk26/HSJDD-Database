@@ -280,6 +280,23 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION insertarCorreoID(idmedi VARCHAR, cor VARCHAR) RETURNS BOOLEAN
+AS $$
+DECLARE
+    idmed INTEGER;
+    idsec INTEGER;
+BEGIN
+    idsec:= CAST(idmedi AS INTEGER);
+    SELECT id_medico INTO idmed FROM medico WHERE id_medico = idsec;
+    IF idmed IS NOT NULL THEN
+        INSERT INTO CORREO(correo,medico_id) VALUES(cor,idmed);
+        RETURN FOUND;
+    ELSE
+        RETURN FALSE;
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+
 CREATE OR REPLACE FUNCTION insertarMedicoConsultorio(ced VARCHAR, con VARCHAR) RETURNS BOOLEAN
 AS $$
 DECLARE
@@ -449,19 +466,58 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION actualizarCorreo(idmedi VARCHAR, correoin VARCHAR) RETURNS BOOLEAN
-AS $$ 
+CREATE OR REPLACE FUNCTION actualizarConsultorio(idco VARCHAR, numeroin VARCHAR,pisoin VARCHAR) RETURNS BOOLEAN
+AS $$
 DECLARE
-    idmed INTEGER;
+    idcon INTEGER;
     idsec INTEGER;
+    idpiso INTEGER;
 BEGIN
-    idsec:= CAST(idmedi AS INTEGER);
-    SELECT id_medico INTO idmed FROM medico WHERE id_medico = idsec;
-    IF idmed IS NOT NULL THEN
-        UPDATE correo SET correo = correoin WHERE medico_id = idmed;
+    idsec:= CAST(idco AS INTEGER);
+    SELECT id_consultorio INTO idcon FROM consultorio WHERE id_consultorio = idsec;
+    SELECT id_piso INTO idpiso FROM piso WHERE piso = pisoin;
+    IF idcon IS NOT NULL THEN
+        UPDATE consultorio SET numero = numeroin, piso_id = idpiso WHERE id_consultorio = idcon;
         RETURN FOUND;
-    ELSE 
+    ELSE
         RETURN FALSE;
     END IF;
 END;
 $$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION eliminarCorreoID(idcorreo VARCHAR) RETURNS BOOLEAN
+AS $$
+DECLARE
+    idcor INTEGER;
+    idsec INTEGER;
+BEGIN
+    idsec:= CAST(idcorreo AS INTEGER);
+    SELECT id_correo INTO idcor FROM correo WHERE id_correo = idsec;
+    IF idcor IS NOT NULL THEN
+        DELETE FROM correo WHERE id_correo = idcor;
+        RETURN FOUND;
+    ELSE
+        RETURN FALSE;
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION eliminarTelefonoID(idtele VARCHAR) RETURNS BOOLEAN
+AS $$
+DECLARE
+    idtel INTEGER;
+    idsec INTEGER;
+BEGIN
+    idsec:= CAST(idtele AS INTEGER);
+    SELECT id_telefono INTO idtel FROM telefono WHERE id_telefono = idsec;
+    IF idtel IS NOT NULL THEN
+        DELETE FROM telefono WHERE id_telefono = idtel;
+        RETURN FOUND;
+    ELSE
+        RETURN FALSE;
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+
+
