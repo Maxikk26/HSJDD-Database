@@ -485,6 +485,23 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION actualizarEspecialidad(ides VARCHAR, espin VARCHAR) RETURNS BOOLEAN
+AS $$
+DECLARE
+    idesp INTEGER;
+    idsec INTEGER;
+BEGIN
+    idsec:= CAST(ides AS INTEGER);
+    SELECT id_especialidad INTO idesp FROM especialidad WHERE id_especialidad = idsec;
+    IF idesp IS NOT NULL THEN
+        UPDATE especialidad SET especialidad = espin WHERE id_especialidad = idesp;
+        RETURN FOUND;
+    ELSE
+        RETURN FALSE;
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+
 CREATE OR REPLACE FUNCTION eliminarCorreoID(idcorreo VARCHAR) RETURNS BOOLEAN
 AS $$
 DECLARE
