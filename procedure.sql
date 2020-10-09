@@ -345,18 +345,25 @@ AS $$
 DECLARE
     idmed INTEGER;
     idia INTEGER;
-    idhora INTEGER;
+    idhor INTEGER;
 	h1 TIME;
 	h2 TIME;
 BEGIN
-	h1:= to_timestamp(desd, 'HH12:MI');
-	h2:= to_timestamp(hast, 'HH12:MI');
-	--RAISE NOTICE 'str h1: %', h1;	
-	--RAISE NOTICE 'str h2: %', h2;
+	h1:= CAST(desd AS TIME);
+	h2:= CAST(hast AS TIME);
+	RAISE NOTICE 'str h1: %', h1;	
+	RAISE NOTICE 'str h2: %', h2;
     SELECT ME.id_medico INTO idmed FROM medico ME WHERE ME.cedula = ced LIMIT 1;
+    RAISE NOTICE 'idmed: %', idmed;
     SELECT DA.id_dia INTO idia FROM dia DA WHERE DA.dia = di;
-    SELECT HO.id_hora INTO idhora FROM hora HO WHERE HO.desde = h1 AND HO.hasta = h2;
-    INSERT INTO ASISTENCIA(hora_id,dia_id,medico_id) VALUES(idhora,idia,idmed);
+    RAISE NOTICE 'idia: %', idia;
+    SELECT HO.id_hora INTO idhor FROM hora HO WHERE HO.desde = h1 AND HO.hasta = h2;
+	IF idhor IS NULL THEN
+		INSERT INTO HORA(desde,hasta) VALUES(h1,h2);
+	ELSE
+		RAISE NOTICE 'idhora: %', idhor;
+		INSERT INTO ASISTENCIA(hora_id,dia_id,medico_id) VALUES(idhor,idia,idmed);
+	END IF;
     RETURN FOUND;
 END;
 $$ LANGUAGE plpgsql;
