@@ -207,7 +207,8 @@ BEGIN
                              FROM MEDICO ME, CARGO CA, ESPECIALIDAD ES, PERTENENCIA PE
                              WHERE ME.id_medico = PE.medico_id
                              AND PE.cargo_id = CA.id_cargo
-                             AND PE.especialidad_id = ES.id_especialidad ORDER BY ES.especialidad;
+                             AND PE.especialidad_id = ES.id_especialidad
+                             AND ME.estatus = true ORDER BY ES.especialidad;
 END;
 $func$ LANGUAGE plpgsql;
 
